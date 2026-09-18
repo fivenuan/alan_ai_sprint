@@ -19,3 +19,22 @@ alan-ai-sprint = "alan_ai_sprint:main"
 [build-system]
 requires = ["uv_build>=0.12.15,<0.13.0"]
 build-backend = "uv_build"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-v --tb=short"
+
+[tool.ruff]
+line-length = 100
+target-version = "py313"
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "N", "UP", "B", "A", "C4", "PT", "RUF"]
+# RUF002 误报中文全角符号，对中文文档不适用
+extend-ignore = ["RUF002"]
+
+[tool.mypy]
+strict = true
+python_version = "3.13"
+warn_return_any = true
+warn_unused_configs = true

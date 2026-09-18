@@ -1,0 +1,17 @@
+# Day 1 · Pre-commit hooks
+# 这些 hook 在每次 commit 前自动跑 ruff + mypy + pytest，确保代码符合工程标准。
+
+repos:
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.16.8
+    hooks:
+      - id: ruff
+        args: [--fix]
+      - id: ruff-format
+
+  - repo: https://github.com/pre-commit/mirrors-mypy
+    rev: v1.18.2
+    hooks:
+      - id: mypy
+        additional_dependencies: [pytest]
+        files: \.py$

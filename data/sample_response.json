@@ -8,8 +8,9 @@
     {
       "title": "The Three-Body Problem",
       "author": "Liu Cixin",
-      "year": 2008,
+      "year": "2008",
       "tags": ["science-fiction", "hard-sf"],
+      "stars": 0,
       "rating": 4.6
     },
     {
@@ -17,6 +18,7 @@
       "author": "Marcus Aurelius",
       "year": 180,
       "tags": ["philosophy", "stoicism"],
+      "stars": 4,
       "rating": null
     }
   ]

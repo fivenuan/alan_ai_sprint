@@ -1,0 +1,4 @@
+﻿git-credentials exists: True
+line count: 2
+https:***TOKEN***@github.com
+https:***TOKEN***@gh-proxy.com

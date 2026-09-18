@@ -15,7 +15,6 @@ dependencies = [
 ]
 
 [project.scripts]
-alan-ai-sprint = "alan_ai_sprint:main"
 parse-json = "alan_ai_sprint.cli:main"
 
 [build-system]

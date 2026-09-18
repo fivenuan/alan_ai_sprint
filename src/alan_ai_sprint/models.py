@@ -36,6 +36,7 @@ class Book(BaseModel):
     author: str = Field(min_length=1)
     year: int = Field(ge=0, le=2100)  # 出版年份：0（如古代作品）到 2100
     tags: list[str] = Field(default_factory=list)  # 可选字段，默认空列表
+    stars: int = Field(ge=0, le=5)
     rating: float | None = Field(default=None, ge=0, le=5)
 
     @field_validator("rating")

@@ -27,6 +27,7 @@ VALID_PAYLOAD = json.dumps(
                 "author": "Liu Cixin",
                 "year": 2008,
                 "tags": ["science-fiction"],
+                "stars": 4,
                 "rating": 4.6,
             },
             {
@@ -34,6 +35,7 @@ VALID_PAYLOAD = json.dumps(
                 "author": "Marcus Aurelius",
                 "year": 180,
                 "tags": [],
+                "stars": 3,
                 "rating": None,
             },
         ],
@@ -49,6 +51,7 @@ def test_parse_valid_payload_returns_typed_response() -> None:
     assert len(response.books) == 2
     assert response.books[0].title == "The Three-Body Problem"
     assert response.books[0].tags == ["science-fiction"]
+    assert response.books[0].stars == 4
     assert response.books[1].rating is None  # null 在 JSON 里 → None
 
 
@@ -70,6 +73,19 @@ def test_parse_rejects_negative_year() -> None:
 
     with pytest.raises(ParsingError, match="schema validation"):
         parse_response(bad_schema)
+
+
+def test_parse_rejects_missing_required_title() -> None:
+    missing_title = json.dumps(
+        {
+            "model": "gpt-4o-mini",
+            "usage": {"prompt_tokens": 1, "completion_tokens": 1},
+            "books": [{"author": "Y", "year": 2020}],
+        }
+    )
+
+    with pytest.raises(ParsingError, match="schema validation"):
+        parse_response(missing_title)
 
 
 def test_parse_rejects_missing_required_field() -> None:
@@ -95,6 +111,20 @@ def test_parse_rejects_rating_with_too_many_decimals() -> None:
 
     with pytest.raises(ParsingError, match="1 decimal place"):
         parse_response(dirty_rating)
+        # parse_response(VALID_PAYLOAD)
+
+
+def test_parse_rejects_unconvertible_type() -> None:
+    bad_type = json.dumps(
+        {
+            "model": "gpt-4o-mini",
+            "usage": {"prompt_tokens": 1, "completion_tokens": 1},
+            "books": [{"title": "X", "author": "Y", "year": "abc"}],  # 字符串转不成 int
+        }
+    )
+
+    with pytest.raises(ParsingError, match="schema validation"):
+        parse_response(bad_type)
 
 
 def test_safe_parse_returns_error_message_on_failure() -> None:

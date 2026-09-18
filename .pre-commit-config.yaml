@@ -9,9 +9,16 @@ repos:
         args: [--fix]
       - id: ruff-format
 
-  - repo: https://github.com/pre-commit/mirrors-mypy
-    rev: v1.18.2
+  # mypy 用 local hook 走项目 venv：
+  # mirrors-mypy 的独立环境看不到 pydantic 等项目依赖，会误报
+  # "Class cannot subclass BaseModel (has type Any)"。
+  # 用 .venv 里的 python 相对路径调用，不依赖系统 PATH。
+  # （Windows 是 .venv/Scripts/，Linux/macOS 应改为 .venv/bin/python）
+  - repo: local
     hooks:
       - id: mypy
-        additional_dependencies: [pytest]
-        files: \.py$
+        name: mypy (project venv)
+        entry: .venv/Scripts/python.exe -m mypy src tests
+        language: system
+        pass_filenames: false
+        always_run: true

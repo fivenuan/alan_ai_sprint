@@ -1,0 +1,23 @@
+{
+  "model": "gpt-4o-mini",
+  "usage": {
+    "prompt_tokens": 120,
+    "completion_tokens": 80
+  },
+  "books": [
+    {
+      "title": "The Three-Body Problem",
+      "author": "Liu Cixin",
+      "year": 2008,
+      "tags": ["science-fiction", "hard-sf"],
+      "rating": 4.6
+    },
+    {
+      "title": "Meditations",
+      "author": "Marcus Aurelius",
+      "year": 180,
+      "tags": ["philosophy", "stoicism"],
+      "rating": null
+    }
+  ]
+}

@@ -3,6 +3,10 @@ __pycache__/
 *.py[codz]
 *$py.class
 
+# 临时诊断文件（_ 开头的 .txt/.log 一律不入库）
+_*.txt
+_*.log
+
 # C extensions
 *.so
 

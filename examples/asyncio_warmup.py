@@ -103,11 +103,60 @@ def demo_4_semaphore() -> None:
     )
 
 
+def demo_5_asyncio_sleep_vs_time_sleep() -> None:
+    """练习 1：对比 asyncio.sleep 和 time.sleep 的耗时。"""
+
+    async def async_sleep_task():
+        await asyncio.sleep(1)
+
+    def time_sleep_task():
+        time.sleep(1)
+
+    async def asyncmain():
+        # 使用 asyncio.sleep
+        return await asyncio.gather(*(async_sleep_task() for _ in range(5)))
+
+    # 使用 asyncio.sleep
+    start_async = time.perf_counter()
+    asyncio.run(asyncmain())
+    async_duration = time.perf_counter() - start_async
+
+    # 使用 time.sleep
+    start_time = time.perf_counter()
+    for _ in range(5):
+        time_sleep_task()
+    time_duration = time.perf_counter() - start_time
+
+    print(f"asyncio.sleep 总耗时: {async_duration:.2f}s")
+    print(f"time.sleep 总耗时: {time_duration:.2f}s\n")
+
+
+def demo_6_slowest_wins() -> None:
+    """练习 2：最慢者定胜负实验。"""
+
+    async def delay_task(delay: float):
+        await asyncio.sleep(delay)
+        return delay
+
+    async def main():
+        delays = [0.5, 1, 1.5, 2, 2.5]
+        start = time.perf_counter()
+        results = await asyncio.gather(*(delay_task(d) for d in delays))
+        total_duration = time.perf_counter() - start
+        print(f"延迟列表: {delays}")
+        print(f"总耗时: {total_duration:.2f}s (应约为最慢的 {max(delays)}s)")
+        print(f"结果: {results}\n")
+
+    asyncio.run(main())
+
+
 if __name__ == "__main__":
-    demo_1_serial()
-    demo_2_concurrent()
-    demo_3_gather_exceptions()
-    demo_4_semaphore()
+    # demo_1_serial()
+    # demo_2_concurrent()
+    # demo_3_gather_exceptions()
+    # demo_4_semaphore()
+    demo_5_asyncio_sleep_vs_time_sleep()
+    demo_6_slowest_wins()
 
     # ==========================================================
     # 热身练习（资料第 10 节）—— 在下面补全，跑通后进 fetcher.py

@@ -17,8 +17,8 @@ YOUR JOB：把下面两个 ``TODO`` 补完，让 ``tests/test_fetcher.py`` 全�
 
 from __future__ import annotations
 
-import asyncio  # noqa: F401  -- TODO 2 实现时要用的，先占位
-import time  # noqa: F401  -- TODO 1 计时要用的，先占位
+import asyncio
+import time
 
 import httpx
 from pydantic import BaseModel, Field
@@ -52,7 +52,12 @@ async def _fetch_one(url: str, client: httpx.AsyncClient) -> FetchResult:
         —— 不要在这里 try/except！让异常抛给 fetch_urls 统一处理。
       - client 由调用方传入并复用（连接池），这里不要新建、也不要关闭。
     """
-    raise NotImplementedError("TODO 1: 实现 _fetch_one")
+
+    start = time.perf_counter()
+    resp = await client.get(url)
+    duration_ms = (time.perf_counter() - start) * 1000
+
+    return FetchResult(url=url, status_code=resp.status_code, duration_ms=duration_ms)
 
 
 async def fetch_urls(urls: list[str], concurrency: int = 10) -> list[FetchResult]:
@@ -68,4 +73,19 @@ async def fetch_urls(urls: list[str], concurrency: int = 10) -> list[FetchResult
          ``FetchResult(url=..., error=str(exc))``（status_code 留 None）
       6. 返回 list[FetchResult]，顺序与 urls 一致（gather 保证顺序）
     """
-    raise NotImplementedError("TODO 2: 实现 fetch_urls")
+    sem = asyncio.Semaphore(concurrency)
+
+    async def limited(url: str) -> FetchResult:
+        async with sem:
+            return await _fetch_one(url, client)
+
+    async with httpx.AsyncClient(timeout=10) as client:
+        tasks = [limited(url) for url in urls]
+        results = await asyncio.gather(*tasks, return_exceptions=True)
+        converted: list[FetchResult] = []
+        for url, item in zip(urls, results, strict=True):
+            if isinstance(item, FetchResult):
+                converted.append(item)
+            else:
+                converted.append(FetchResult(url=url, error=str(item)))
+        return converted

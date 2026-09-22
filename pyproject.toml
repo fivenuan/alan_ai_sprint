@@ -8,6 +8,7 @@ authors = [
 ]
 requires-python = ">=3.13"
 dependencies = [
+    "httpx>=0.28.1",
     "mypy>=2.3.1",
     "pydantic>=2.13.5",
     "pytest>=9.1.1",
@@ -16,6 +17,7 @@ dependencies = [
 
 [project.scripts]
 parse-json = "alan_ai_sprint.cli:main"
+fetch-urls = "alan_ai_sprint.fetch_cli:main"
 
 [build-system]
 requires = ["uv_build>=0.12.15,<0.13.0"]
@@ -24,6 +26,7 @@ build-backend = "uv_build"
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 addopts = "-v --tb=short"
+asyncio_mode = "auto"
 
 [tool.ruff]
 line-length = 100
@@ -39,3 +42,8 @@ strict = true
 python_version = "3.13"
 warn_return_any = true
 warn_unused_configs = true
+
+[dependency-groups]
+dev = [
+    "pytest-asyncio>=1.4.0",
+]

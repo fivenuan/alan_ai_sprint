@@ -1,0 +1,7 @@
+# 每行一个 URL，# 开头的行为注释
+# 全部是 httpbin.org 的可控延迟端点，适合手动验证（测试不打真网）
+https://httpbin.org/delay/1
+https://httpbin.org/delay/2
+https://httpbin.org/status/200
+https://httpbin.org/status/500
+https://this-domain-does-not-exist-abc123.com

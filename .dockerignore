@@ -1,0 +1,7 @@
+# 注释
+.venv/          # 匹配任何位置的 .venv 目录（含其下所有内容）
+.git/           # 同上
+*.pyc           # 通配符，匹配所有 .pyc 文件
+__pycache__/    # Python 字节码缓存目录
+.pytest_cache/ .ruff_cache/ .mypy_cache/
+_*.txt            # 匹配任何位置的以 _ 开头的 .txt 文件

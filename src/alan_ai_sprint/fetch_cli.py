@@ -19,6 +19,7 @@ import sys
 import time
 from pathlib import Path
 
+from alan_ai_sprint.decorators import read_urls_lazy
 from alan_ai_sprint.fetcher import fetch_urls
 
 
@@ -45,8 +46,7 @@ def main(argv: list[str] | None = None) -> int:
         print(f"error: file not found: {path}", file=sys.stderr)
         return 1
 
-    lines = path.read_text(encoding="utf-8").splitlines()
-    urls = [line.strip() for line in lines if line.strip() and not line.startswith("#")]
+    urls = list(read_urls_lazy(str(path)))
     print(f"loaded {len(urls)} urls, concurrency={args.concurrency}")
 
     start = time.perf_counter()

@@ -23,6 +23,8 @@ import time
 import httpx
 from pydantic import BaseModel, Field
 
+from alan_ai_sprint.decorators import async_retry
+
 
 class FetchResult(BaseModel):
     """一次抓取的结果。成功时 status_code 非 None；失败时 error 非 None。"""
@@ -38,6 +40,7 @@ class FetchResult(BaseModel):
         return self.status_code is not None and self.error is None
 
 
+@async_retry(times=3, delay=0.2)
 async def _fetch_one(url: str, client: httpx.AsyncClient) -> FetchResult:
     """抓取单个 URL。
 

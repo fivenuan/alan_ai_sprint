@@ -1,0 +1,30 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: astral-sh/setup-uv@v5
+        with:
+          enable-cache: true
+
+      # 按 uv.lock 精确复现本地环境（含 dev 组：pytest/ruff/mypy）
+      - name: Install dependencies
+        run: uv sync --frozen
+
+      # 三件套：与本地 pre-commit 完全一致的质量门
+      - name: Lint (ruff)
+        run: uv run ruff check .
+
+      - name: Type check (mypy strict)
+        run: uv run mypy src tests
+
+      - name: Test (pytest)
+        run: uv run pytest -q

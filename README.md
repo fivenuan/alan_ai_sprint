@@ -1,5 +1,7 @@
 # alan_ai_sprint
 
+![CI](https://github.com/fivenuan/alan_ai_sprint/actions/workflows/ci.yml/badge.svg)
+
 > 我的 1 个月 AI Agent 转型 sprint · 从广告算法工程师到 AI Agent 工程 + 强化学习
 
 ## 我是谁
